@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useStore } from "../store";
-import { IconBag, IconClose, IconMenu, IconUser, MoonMark } from "./Icons";
+import { IconBag, IconBed, IconClose, IconHome, IconMenu, IconOrders, IconUser, MoonMark } from "./Icons";
 
 const links = [
   { to: "/", label: "Accueil", end: true },
@@ -75,12 +75,18 @@ export function Shell({ children }) {
       <main>{children}</main>
       <Footer />
       <nav className="tabbar" aria-label="Navigation mobile">
-        <NavLink to="/" end>
-          Accueil
+        <NavLink to="/" end aria-label="Accueil">
+          <IconHome />
         </NavLink>
-        <NavLink to="/matelas">Matelas</NavLink>
-        <NavLink to="/commandes">Commandes</NavLink>
-        <NavLink to={user ? "/compte" : "/connexion"}>Compte</NavLink>
+        <NavLink to="/matelas" aria-label="Nos matelas">
+          <IconBed />
+        </NavLink>
+        <NavLink to="/commandes" aria-label="Commandes">
+          <IconOrders />
+        </NavLink>
+        <NavLink to={user ? "/compte" : "/connexion"} aria-label={user ? "Compte" : "Connexion"}>
+          <IconUser />
+        </NavLink>
       </nav>
     </>
   );
