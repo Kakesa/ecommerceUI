@@ -566,6 +566,7 @@ main { min-height: 60vh; }
   .site-footer { padding-bottom: 5.5rem; }
   main { padding-bottom: 0.5rem; }
   .gate { min-height: 100vh; }
-  .gate__panel { padding: 1.3rem 1.1rem 2rem; }
+  .gate__art, .gate__art svg { min-height: 168px; height: 190px; }
+  .gate__panel { padding: 1.1rem 1.1rem 2rem; }
   .gate__panel h1 { font-size: 1.8rem; }
 }

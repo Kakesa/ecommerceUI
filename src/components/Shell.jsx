@@ -56,7 +56,9 @@ export function Shell({ children }) {
           <>
             <p className="m-loc">Livraison à {place}</p>
             <div className="m-bar__row">
-              <span className="m-bar__side" />
+              <Link to="/connexion" className="icon-btn" aria-label="Connexion">
+                <IconUser />
+              </Link>
               <Link to="/" className="brand">
                 <MoonMark size={22} />
                 <span>Teka Somba</span>
@@ -97,6 +99,9 @@ export function Shell({ children }) {
             ))}
           </nav>
           <div className="nav-actions">
+            <Link to="/connexion" className="nav-link">
+              <span>Connexion</span>
+            </Link>
             <Link to={user ? "/compte" : "/connexion"} className="nav-link">
               <IconUser />
               <span>{user ? user.firstName : "Connexion"}</span>

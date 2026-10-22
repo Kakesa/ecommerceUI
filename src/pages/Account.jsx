@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { products } from "../data";
 import { useStore } from "../store";
 import { BedArt } from "../components/BedArt";
@@ -12,6 +12,7 @@ const menu = [
 
 export function AccountPage() {
   const { user, logout, favorites } = useStore();
+  const navigate = useNavigate();
   const loved = products.filter((product) => favorites.includes(product.id));
 
   if (!user) {
@@ -48,13 +49,23 @@ export function AccountPage() {
       <section>
         <h2>Votre espace</h2>
         <div className="account-menu">
+          <Link to="/connexion">
+            <strong>Connexion</strong>
+            <span>Ouvrir la page e-mail et mot de passe.</span>
+          </Link>
           {menu.map((item) => (
             <Link key={item.title} to={item.to}>
               <strong>{item.title}</strong>
               <span>{item.text}</span>
             </Link>
           ))}
-          <button type="button" onClick={logout}>
+          <button
+            type="button"
+            onClick={() => {
+              logout();
+              navigate("/connexion");
+            }}
+          >
             <strong>Déconnexion</strong>
             <span>Revenir plus tard, le cocon reste là.</span>
           </button>

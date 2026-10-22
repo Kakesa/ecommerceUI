@@ -72,7 +72,8 @@ export function LoginPage() {
           <span>Teka Somba</span>
         </Link>
         <p className="eyebrow">Connexion</p>
-        <h1>Retrouvez votre cocon.</h1>
+        <h1>Bonsoir, vous.</h1>
+        <p className="lede">Connectez-vous pour retrouver vos envies et suivre vos prochaines nuits douces.</p>
         <label>
           Adresse e-mail
           <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" />
@@ -85,6 +86,9 @@ export function LoginPage() {
         <button className="btn" type="submit">
           Se connecter
         </button>
+        <Link to="/" className="btn btn--ghost">
+          Continuer sans compte
+        </Link>
         <Link to="/bienvenue" className="text-btn">
           Découvrir Teka Somba
         </Link>
