@@ -1,13 +1,42 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useStore } from "../store";
-import { IconBag, IconBed, IconClose, IconHome, IconMenu, IconOrders, IconUser, MoonMark } from "./Icons";
+import { IconBack, IconBag, IconBed, IconClose, IconHome, IconMenu, IconOrders, IconUser, MoonMark } from "./Icons";
 
 const links = [
   { to: "/", label: "Accueil", end: true },
   { to: "/matelas", label: "Nos matelas" },
   { to: "/commandes", label: "Commandes" },
 ];
+
+const tabItems = [
+  { to: "/", label: "Accueil", end: true, icon: <IconHome /> },
+  { to: "/matelas", label: "Matelas", icon: <IconBed /> },
+  { to: "/commandes", label: "Commandes", icon: <IconOrders /> },
+];
+
+function screenTitle(pathname) {
+  if (pathname.startsWith("/matelas/")) return "Matelas";
+  const titles = {
+    "/matelas": "Nos matelas",
+    "/panier": "Panier",
+    "/commande": "Coordonnées",
+    "/paiement": "Paiement",
+    "/confirmation": "Confirmation",
+    "/commandes": "Commandes",
+    "/compte": "Compte",
+  };
+  return titles[pathname] || "Teka Somba";
+}
+
+function parentPath(pathname) {
+  if (pathname.startsWith("/matelas/")) return "/matelas";
+  if (pathname === "/commande") return "/panier";
+  if (pathname === "/paiement") return "/commande";
+  if (pathname === "/confirmation") return "/commandes";
+  if (pathname === "/panier") return "/matelas";
+  return "/";
+}
 
 export function Shell({ children }) {
   const { count, user } = useStore();
@@ -17,8 +46,40 @@ export function Shell({ children }) {
 
   if (bare) return <main className="bare">{children}</main>;
 
+  const title = screenTitle(location.pathname);
+  const place = user ? `${user.city}, ${user.zip}` : "Paris, 75011";
+
   return (
     <>
+      <header className="m-bar">
+        {location.pathname === "/" ? (
+          <>
+            <p className="m-loc">Livraison à {place}</p>
+            <div className="m-bar__row">
+              <span className="m-bar__side" />
+              <Link to="/" className="brand">
+                <MoonMark size={22} />
+                <span>Teka Somba</span>
+              </Link>
+              <Link to="/panier" className="icon-btn m-bag" aria-label={`Panier, ${count} article${count > 1 ? "s" : ""}`}>
+                <IconBag />
+                {count > 0 && <em>{count}</em>}
+              </Link>
+            </div>
+          </>
+        ) : (
+          <div className="m-bar__row">
+            <Link to={parentPath(location.pathname)} className="icon-btn" aria-label="Retour">
+              <IconBack />
+            </Link>
+            <strong className="m-title">{title}</strong>
+            <Link to="/panier" className="icon-btn m-bag" aria-label={`Panier, ${count} article${count > 1 ? "s" : ""}`}>
+              <IconBag />
+              {count > 0 && <em>{count}</em>}
+            </Link>
+          </div>
+        )}
+      </header>
       <header className="site-header">
         <div className="promo">
           Livraison offerte en France métropolitaine · De beaux jours commencent la nuit.
@@ -75,17 +136,15 @@ export function Shell({ children }) {
       <main>{children}</main>
       <Footer />
       <nav className="tabbar" aria-label="Navigation mobile">
-        <NavLink to="/" end aria-label="Accueil">
-          <IconHome />
-        </NavLink>
-        <NavLink to="/matelas" aria-label="Nos matelas">
-          <IconBed />
-        </NavLink>
-        <NavLink to="/commandes" aria-label="Commandes">
-          <IconOrders />
-        </NavLink>
-        <NavLink to={user ? "/compte" : "/connexion"} aria-label={user ? "Compte" : "Connexion"}>
+        {tabItems.map((item) => (
+          <NavLink key={item.to} to={item.to} end={item.end}>
+            {item.icon}
+            <span>{item.label}</span>
+          </NavLink>
+        ))}
+        <NavLink to={user ? "/compte" : "/connexion"}>
           <IconUser />
+          <span>{user ? "Compte" : "Connexion"}</span>
         </NavLink>
       </nav>
     </>

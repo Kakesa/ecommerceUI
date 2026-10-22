@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { BedArt } from "../components/BedArt";
 import { ProductCard } from "../components/ProductCard";
-import { euro, products } from "../data";
-import { IconArrow } from "../components/Icons";
+import { euro, products, TECHNOLOGIES } from "../data";
+import { IconArrow, IconSearch } from "../components/Icons";
+import { useStore } from "../store";
 
 const criteria = [
   {
@@ -36,8 +37,60 @@ const faqs = [
 
 export function HomePage() {
   const featured = products[0];
+  const { user } = useStore();
+  const name = user?.firstName || "Claire";
+  const lowest = Math.min(...products.map((product) => product.basePrice));
   return (
     <>
+      <section className="m-home m-only">
+        <h1>
+          Bonjour {name},
+          <br />
+          à vous les nuits douces.
+        </h1>
+        <Link to="/matelas" className="m-search">
+          <IconSearch />
+          <span>Un matelas, une dimension, un confort...</span>
+        </Link>
+        <article className="m-hero">
+          <div className="m-hero__art">
+            <BedArt variant="nuage" />
+          </div>
+          <div className="m-hero__copy">
+            <p className="eyebrow">La collection des beaux rêves</p>
+            <h2>Le confort, naturellement.</h2>
+            <p>Nos matelas dès {euro(lowest)}</p>
+            <Link to="/matelas" className="btn">
+              Explorer <IconArrow />
+            </Link>
+          </div>
+        </article>
+        <div className="chips m-chips">
+          <Link to="/matelas" className="is-on">
+            Tous
+          </Link>
+          {TECHNOLOGIES.filter((item) => item.id !== "ressorts").map((item) => (
+            <Link key={item.id} to={`/matelas?tech=${item.id}`}>
+              {item.label}
+            </Link>
+          ))}
+        </div>
+        <div className="m-home__head">
+          <h2>Le favori des nuits douces</h2>
+          <Link to="/matelas">Voir tout</Link>
+        </div>
+        <div className="m-grid">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+        <article className="shipping-note">
+          <strong>Livraison offerte, nuits sereines</strong>
+          <span>Partout en France métropolitaine.</span>
+        </article>
+      </section>
+
+      <div className="d-only">
       <section className="hero">
         <div className="hero__copy">
           <p className="eyebrow">Teka Somba</p>
@@ -143,6 +196,7 @@ export function HomePage() {
           </article>
         </div>
       </section>
+      </div>
     </>
   );
 }

@@ -1,10 +1,11 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ProductCard } from "../components/ProductCard";
 import { FIRMNESS, SIZES, TECHNOLOGIES, euro, priceFor, products } from "../data";
 
 export function CatalogPage() {
   const [params, setParams] = useSearchParams();
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const tech = params.get("tech") || "";
   const firmness = params.get("fermete") || "";
   const size = params.get("taille") || "160x200";
@@ -62,9 +63,12 @@ export function CatalogPage() {
       </div>
 
       <div className="catalog">
-        <aside className="filters">
+        <aside className={`filters ${filtersOpen ? "is-open" : ""}`}>
           <div className="filters__top">
             <h2>Filtres</h2>
+            <button type="button" className="text-btn m-only" onClick={() => setFiltersOpen(false)}>
+              Fermer
+            </button>
             {active.length > 0 && (
               <button type="button" className="text-btn" onClick={() => setParams(new URLSearchParams())}>
                 Réinitialiser
@@ -146,7 +150,18 @@ export function CatalogPage() {
         </aside>
 
         <div className="catalog__main">
+          <label className="search m-only m-search-field">
+            <span className="sr">Rechercher un matelas</span>
+            <input
+              value={query}
+              placeholder="Rechercher un matelas"
+              onChange={(event) => update({ q: event.target.value })}
+            />
+          </label>
           <div className="catalog__tools">
+            <button type="button" className="m-only filters-toggle" onClick={() => setFiltersOpen(true)}>
+              Filtres{active.length > 0 ? ` · ${active.length}` : ""}
+            </button>
             <div className="chips">
               <button type="button" className={!tech ? "is-on" : ""} onClick={() => update({ tech: "" })}>
                 Tous les matelas

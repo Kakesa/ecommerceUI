@@ -92,7 +92,7 @@ export function ProductPage() {
 
           <button
             type="button"
-            className="btn btn--block"
+            className="btn btn--block pdp__buy"
             onClick={() => {
               addToCart(product.id, size, firmness);
               setAdded(true);
